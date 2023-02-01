@@ -17,7 +17,14 @@ const defaultFormFields = {
 const SignUpForm = () =>{
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword} = formFields;
-console.log(formFields);
+
+  //  
+//  const  { setCurrentUser } = useContext(UserContext);
+
+  //const  val = useContext(UserContext);
+
+
+// console.log(formFields);
 const resetFormFields = () =>{
     setFormFields(defaultFormFields);
 }
@@ -28,7 +35,8 @@ if(password !== confirmPassword){
     alert("password does not match")
     return;
 }try{
-const {user} = await createAuthUserWithEmailAndPassword(email, password);
+const {user} = await createAuthUserWithEmailAndPassword(email, password); 
+// setCurrentUser(user);
 await createUserDocumentFromAuth(user,{displayName});
 resetFormFields();
 

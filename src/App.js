@@ -4,20 +4,14 @@
 // // import Contact from './components/category-item/Home/Contact';
 // import Directory  from './components/directory/directory.component'
 import Home from './routes/home/home.component'
-import { Routes,Route,Outlet } from 'react-router-dom';
+import { Routes,Route } from 'react-router-dom';
 import Navigation from './routes/navigation/navigation.component'
 import Authentication from './routes/authentication/authentication.component';
 // import './categories.styles.scss';
-
+import Shop from './routes/shop/shop.component'
 const App = () =>{
 
 
-
-  const Shop =() =>{
-    return(
-      <h1> iam a shop page</h1>
-    )
-  }
 
 
   return (
