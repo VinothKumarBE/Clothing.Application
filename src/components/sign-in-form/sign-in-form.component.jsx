@@ -1,103 +1,80 @@
-import { useState} from "react";
-import { signInWithGooglePopup, createUserDocumentFromAuth,signInAuthWithEmailAndPassword } from '../../utils/firebase/firebase.utils';  
- import FormInput from '../form-input/form-input.component'
-import './sign-in-form.styles.scss'; 
-import Button from "../button/button.component";
-//import { UserContext} from '../../contexts/user.context'
+import { useState } from 'react';
 
+import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
+
+import {
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
+} from '../../utils/firebase/firebase.utils';
+
+import './sign-in-form.styles.scss';
 
 const defaultFormFields = {
-   
-     email:'',
-     password:'',
-  
+  email: '',
+  password: '',
+};
 
-}
-
-const SignInForm = () =>{
+const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const {  email, password } = formFields;
- 
-// console.log(formFields);
-// const { setCurrentUser } = useContext(UserContext);
+  const { email, password } = formFields;
 
-const resetFormFields = () =>{
+  const resetFormFields = () => {
     setFormFields(defaultFormFields);
-};
-const signInWithGoogle = async () =>{
-  signInWithGooglePopup();
-  // setCurrentUser(user);
- 
- // console.log(response)
- }; 
-
-  const handleSubmit = async (event) =>{
-  event.preventDefault();
-try{
-const {user} = await signInAuthWithEmailAndPassword(email, password);
-// console.log(response)
-// setCurrentUser(user);
-resetFormFields();
-}catch(error) {
-  switch(error.code) {
-    case 'auth/wrong-password':
-      alert('incorrect password for email or password')
-      break;
-    case 'auth/user-not-found':
-        alert('no user associated with this  email');
-        break;
-    default:
-        console.log(error);
-  }
-  // if (error.code === "auth/wrong-password") {
-  //   alert('incorrect password for email or password')
-  // }else if ()
-  // console.log(error);
-}
-};
-
-  const handleChange = (event) =>{
-    const { name, value } = event.target;
-    setFormFields({...formFields, [name]: value})
-
   };
 
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
 
-    return(
-        <div className="sign-up-container">
-           <h2>Already have an account?</h2>
-            <span>Signup in with  your email and password</span>
-            <form onSubmit={handleSubmit}>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
+    try {
+      await signInAuthUserWithEmailAndPassword(email, password);
+      resetFormFields();
+    } catch (error) {
+      console.log('user sign in failed', error);
+    }
+  };
 
-<FormInput 
-type="email" 
-label="Email"
-required 
-onChange={handleChange} 
- name="email"
-  value={email} 
-  />
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
+    setFormFields({ ...formFields, [name]: value });
+  };
 
-<FormInput 
-type="password"
-label="Password"
- required
-  onChange={handleChange}
-   name="password"
-    value={password} 
-    />
+  return (
+    <div className='sign-in-container'>
+      <h2>Already have an account?</h2>
+      <span>Sign in with your email and password</span>
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          label='Email'
+          type='email'
+          required
+          onChange={handleChange}
+          name='email'
+          value={email}
+        />
 
-
-<div className="buttons-container">
-
-<Button  type="submit">Sign In</Button>
-<Button buttonType='google' type="button"onClick={signInWithGoogle}>Google Sign In</Button>
-</div>
-
-            </form>
+        <FormInput
+          label='Password'
+          type='password'
+          required
+          onChange={handleChange}
+          name='password'
+          value={password}
+        />
+        <div className='buttons-container'>
+          <Button type='submit'>Sign In</Button>
+          <Button buttonType='google' type='button' onClick={signInWithGoogle}>
+            Sign In With Google
+          </Button>
         </div>
-    )
-}
+      </form>
+    </div>
+  );
+};
+
 export default SignInForm;
