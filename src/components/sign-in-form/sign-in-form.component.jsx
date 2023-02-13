@@ -1,108 +1,80 @@
-import { useState } from "react";
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase/firebase.utils';  
- import FormInput from '../form-input/form-input.component'
-import './sign-in-form.styles.scss'; 
-import Button from "../button/button.component";
+import { useState } from 'react';
 
+import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
 
+import {
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
+} from '../../utils/firebase/firebase.utils';
+
+import './sign-in-form.styles.scss';
 
 const defaultFormFields = {
-     displayName: '',
-     email:'',
-     password:'',
-     confirmPassword:''
+  email: '',
+  password: '',
+};
 
-}
-
-const SignInForm = () =>{
+const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { displayName, email, password, confirmPassword} = formFields;
-console.log(formFields);
-const resetFormFields = () =>{
+  const { email, password } = formFields;
+
+  const resetFormFields = () => {
     setFormFields(defaultFormFields);
-}
-
- const handleSubmit = async (event) =>{
-event.preventDefault();
-if(password !== confirmPassword){
-    alert("password does not match")
-    return;
-}try{
-const {user} = await createAuthUserWithEmailAndPassword(email, password);
-await createUserDocumentFromAuth(user,{displayName});
-resetFormFields();
-
-}catch(error) {
-
-    if(error.code === 'auth/email-already-in-use'){
-        alert('cannot create users,email already in use')
-    }else{
-        console.log('user creation encountered error', error);
-    }
-  
-
-}
-
-
- };
-
-  const handleChange = (event) =>{
-    const { name, value } = event.target;
-    setFormFields({...formFields, [name]: value})
-
   };
 
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
 
-    return(
-        <div className="sign-up-container">
-           <h2>Dont't have an account?</h2>
-            <span>Signup up with  your email and password</span>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-            <form onSubmit={handleSubmit}>
+    try {
+      await signInAuthUserWithEmailAndPassword(email, password);
+      resetFormFields();
+    } catch (error) {
+      console.log('user sign in failed', error);
+    }
+  };
 
-<FormInput
-type="text"
-label="Display Name"
- required 
- onChange={handleChange}
-  name="displayName"  
-  value={displayName} 
-  />
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-<FormInput 
-type="email" 
-label="Email"
-required 
-onChange={handleChange} 
- name="email"
-  value={email} 
-  />
+    setFormFields({ ...formFields, [name]: value });
+  };
 
+  return (
+    <div className='sign-in-container'>
+      <h2>Already have an account?</h2>
+      <span>Sign in with your email and password</span>
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          label='Email'
+          type='email'
+          required
+          onChange={handleChange}
+          name='email'
+          value={email}
+        />
 
-<FormInput 
-type="password"
-label="Password"
- required
-  onChange={handleChange}
-   name="password"
-    value={password} 
-    />
-
-
-<FormInput  
-type="password" 
-label="Confirm Password"
-required 
-onChange={handleChange}
- name="confirmPassword" 
- value={confirmPassword}
-  />
-
-<Button buttonType='google' type="submit">Sign up</Button>
-
-
-            </form>
+        <FormInput
+          label='Password'
+          type='password'
+          required
+          onChange={handleChange}
+          name='password'
+          value={password}
+        />
+        <div className='buttons-container'>
+          <Button type='submit'>Sign In</Button>
+          <Button buttonType='google' type='button' onClick={signInWithGoogle}>
+            Sign In With Google
+          </Button>
         </div>
-    )
-}
+      </form>
+    </div>
+  );
+};
+
 export default SignInForm;
