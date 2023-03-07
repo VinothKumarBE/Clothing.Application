@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { useNavigate, Link } from 'react-router-dom';
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
 
@@ -9,11 +9,13 @@ import {
 } from '../../utils/firebase/firebase.utils';
 
 import './sign-in-form.styles.scss';
+import { async } from '@firebase/util';
 
 const defaultFormFields = {
   email: '',
   password: '',
 };
+//const navigate = useNavigate();
 
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
@@ -22,17 +24,21 @@ const SignInForm = () => {
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
+  const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+    await signInWithGooglePopup()
+    navigate('/');
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+   
 
     try {
       await signInAuthUserWithEmailAndPassword(email, password);
       resetFormFields();
+      
     } catch (error) {
       console.log('user sign in failed', error);
     }
@@ -43,6 +49,12 @@ const SignInForm = () => {
 
     setFormFields({ ...formFields, [name]: value });
   };
+  //const signInWithGoogle = ()=>{
+    
+ // }
+
+
+
 
   return (
     <div className='sign-in-container'>
@@ -68,7 +80,9 @@ const SignInForm = () => {
         />
         <div className='buttons-container'>
           <Button type='submit'>Sign In</Button>
-          <Button buttonType='google' type='button' onClick={signInWithGoogle}>
+          <Button buttonType='google' type='button'
+           onClick={signInWithGoogle}
+          >
             Sign In With Google
           </Button>
         </div>

@@ -50,12 +50,12 @@ const SHOP_DATA = [
         imageUrl: 'https://i.ibb.co/1f2nWMM/wolf-cap.png',
         price: 14,
       },
-      {
-        id: 9,
-        name: 'Blue Snapback',
-        imageUrl: 'https://i.ibb.co/X2VJP2W/blue-snapback.png',
-        price: 16,
-      },
+      // {
+      //   id: 9,
+      //   name: 'Blue Snapback',
+      //   imageUrl: 'https://i.ibb.co/X2VJP2W/blue-snapback.png',
+      //   price: 16,
+      // },
     ],
   },
   {

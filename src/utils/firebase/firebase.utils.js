@@ -19,6 +19,7 @@ import {
   writeBatch,
   query,
 } from 'firebase/firestore';
+import { getCloths } from '../../service/product-service';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDDU4V-_QV3M8GyhC9SVieRTDM4dbiT0Yk',
@@ -61,17 +62,18 @@ export const addCollectionAndDocuments = async (
 };
 
 export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, 'categories');
-  const q = query(collectionRef);
+  // const collectionRef = collection(db, 'categories');
+  // const q = query(collectionRef);
 
-  const querySnapshot = await getDocs(q);
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
+  // const querySnapshot = await getDocs(q);
+  // const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+  //   const { title, items } = docSnapshot.data();
+  //   acc[title.toLowerCase()] = items;
+  //   return acc;
+  // }, {});
 
-  return categoryMap;
+  // return categoryMap;
+  return (getCloths);
 };
 
 export const createUserDocumentFromAuth = async (
